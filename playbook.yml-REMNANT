@@ -1,0 +1,38 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: create machines
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: apply terraform code
+      terraform:
+        project_path: ./terraform
+        state: present
+      register: terraform
+
+    - name: add terraform zabbix_web host to inventory
+      add_host:
+        name: "{{ terraform.outputs.zabbix_web.value }}"
+        groups:
+           - zabbix_web
+
+    - name: add terraform zabbix_server host to inventory
+      add_host:
+        name: zabbix_server
+
+    - name: recup pour verif host
+      ansible.builtin.debug:
+        msg: "{{ terraform.outputs.zabbix_web.value }}"
+
+
+- name: configure machine web
+  gather_facts: no
+  become: yes
+  hosts: zabbix_web
+  remote_user: root
+
+  tasks:
+    - name : install apache2
+      apt: name=apache2 update_cache=yes state=latest
+            
