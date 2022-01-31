@@ -281,22 +281,22 @@ sudo ufw reload
 ## Result 
 <div align="center">
 <a>
-    <img src="images/zabbix.png" alt="Logo" width="800" height="200">
+    <img src="images/zabbix1.png"  width="1000" height="500">
 </a>
 </div align="center">
 <div align="center">
 <a>
-    <img src="images/apache1.png" alt="Logo" width="800" height="200">
+    <img src="images/apache1.png"  width="1000" height="500">
 </a>
 </div align="center">
 <div align="center">
 <a>
-    <img src="images/apache2.png" alt="Logo" width="800" height="200">
+    <img src="images/apache2.png"  width="1000" height="500">
 </a>
 </div align="center">
 <div align="center">
 <a>
-    <img src="images/HA.png" alt="Logo" width="800" height="200">
+    <img src="images/HA.png" width="1000" height="500">
 </a>
 </div align="center">
 ## How to contribute
