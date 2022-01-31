@@ -35,10 +35,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Ce TP a pour objectif d’expérimenter le déploiement d’une solution cloud dans une plateforme
-cloud. Contrairement au précédent TP, ce dernier pourra être réalisé en groupe de 2 ou 3. L’objectif
-de ce TP n’est pas d’évaluer votre capacité à déployer une solution mais en votre capacité à en
-optimiser et en automatiser le déploiement.
+The objective of this tutorial is to experiment with the deployment of a cloud solution in a cloud platform. Unlike the previous lab, this one can be done in groups of 2 or 3. The objective of this tutorial is not to evaluate your ability to deploy a solution, but rather your ability to optimize and automate its deployment.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -108,20 +105,25 @@ Copy the content of the public key which is displayed. You will need this in the
 You must upload the content of the public part of the SSH key pair you just generated to the Scaleway interface. This is then transferred to your Instance during the boot process. You can then connect and authenticate from your local machine (where the private key is) to the remote Instance (where the public key is).
 
 * Log into the Scaleway console, and navigate to the Credentials tab of your Project Dashboard:
-* 
-![alt text](https://github.com/MrRize-web/TP-3-Mise-en-place-d-une-solution-Cloud-KLR-ED/images/scaleway-credentials-nav.png)
+<a href="https://www.scaleway.com/en/docs/console/my-project/how-to/create-ssh-key/">
+    <img src="images/scaleway-credentials-nav.png" alt="Logo" width="800" height="200">
+</a>
 
 * Scroll down to the SSH Key section, and click Add a new SSH key.
-![alt text](https://github.com/MrRize-web/TP-3-Mise-en-place-d-une-solution-Cloud-KLR-ED/images/scaleway-ssh-keys.png)
+<a href="https://www.scaleway.com/en/docs/console/my-project/how-to/create-ssh-key/">
+    <img src="images/scaleway-ssh-keys.png" alt="Logo" width="800" height="200">
+</a>
 
 Paste the content of the public key (which you copied in the previous step) into the pop-up box, and optionally add a description. Then click Add a SSH key.
 You will now be able to connect to your Instances via SSH
+If problem when redeploying new instance : 
 
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+ ```ssh-keygen -f "/home/$user$/.ssh/known_hosts" -R "Ip_Public"```
+
+ ```ssh -i ~/.ssh/id_rsa root@51.15.209.133```
+ 
 ## Configuration de la CLI SCW
+
 ```scw init```
 
 ```Enter a valid secret-key or an email: <votre_mail>
@@ -148,6 +150,48 @@ Do you want to proceed with these changes? (Y/n): y
 [V] Initialization completed with success.
 Except for SSH key: could not find an SSH key at ~/.ssh/id_rsa.pub
 ```
+# First Terraform
+
+Based on scw-cli README.md
+Creating the directory to store the Terraform project
+
+```mkdir myproject```
+
+```cd myproject```
+
+Creating the first Terraform file. Terraform files must necessarily end with the .tf extension.
+
+```nano main.tf```
+### Example : 
+```
+terraform {
+required_providers {
+scaleway = {
+source = "scaleway/scaleway"
+}
+}
+required_version = ">= 0.13"
+}
+provider "scaleway" {
+zone = "fr-par-1"
+region = "fr-par"
+}
+resource "scaleway_instance_ip" "public_ip" {
+}
+resource "scaleway_instance_server" "web" {
+type = "DEV1-S"
+image = "ubuntu_focal"
+tags = ["front", "web"]
+ip_id = scaleway_instance_ip.public_ip.id
+root_volume {}
+}
+```
+Terraform Initialization, Planning and Implementation.
+```terraform init```
+```terraform plan```
+```terraform apply```
+Once your tests are completed you can destroy the resources with :
+```terraform destroy```
 
 ## How to contribute
 Just send a pull-request :trophy:
