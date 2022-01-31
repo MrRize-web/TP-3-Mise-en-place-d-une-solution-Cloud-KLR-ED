@@ -12,79 +12,37 @@ provider "scaleway" {
   region = "fr-par"
 }
 
-resource "scaleway_instance_ip" "public_ip" {
-}
+resource "scaleway_instance_ip" "public_ip" {}
 
-resource "scaleway_k8s_cluster" "KubeCluster" {
-  name             = "KubeCluster"
-  description      = "my awesome cluster"
-  version          = "1.18.0"
-  cni              = "calico"
-  tags             = ["Cluster Kuber"]
-
-  autoscaler_config {
-    disable_scale_down              = false
-    scale_down_delay_after_add      = "5m"
-    estimator                       = "binpacking"
-    expander                        = "random"
-    ignore_daemonsets_utilization   = true
-    balance_similar_node_groups     = true
-    expendable_pods_priority_cutoff = -5
-  }
-}
-
-resource "scaleway_k8s_pool" "KubeClusterPool" {
-  cluster_id  = scaleway_k8s_cluster.KubeCluster.id
-  name        = "KubeClusterPool"
-  node_type   = "GP1-XS"
-  size        = 3
-  autoscaling = true
-  autohealing = true
-  min_size    = 1
-  max_size    = 5
-}
-
-resource "scaleway_instance_volume" "data" {
-  size_in_gb = 20
-  type = "b_ssd"
-}
-resource "scaleway_instance_volume" "data2" {
-  size_in_gb = 20
-  type = "b_ssd"
-}
-
-resource "scaleway_instance_server" "Grafana1" {
-  type        = "GP1-XS"
-  image       = "ubuntu_focal"
-  name        = "Grafana-1"
-
-  tags = [ "Grafana", "1" ]
-
-  additional_volume_ids = [ scaleway_instance_volume.data.id ]
-}
+#resource "scaleway_instance_server" "zabbix_web" {
+#  type        = "GP1-XS"
+#  image       = "ubuntu_focal"
+#  name        = "zabbix_web"
+ 
+#  tags = [ "zabbix_web", "1" ]
+#}
 
 
-resource "scaleway_instance_server" "Grafana2" {
-  type        = "GP1-XS"
-  image       = "ubuntu_focal"
-  name        = "Grafana-2"
+#resource "scaleway_instance_server" "zabbix_server" {
+#  type        = "GP1-XS"
+#  image       = "ubuntu_focal"
+#  name        = "zabbix_server"
 
-  tags = [ "Grafana", "2" ]
-
-  additional_volume_ids = [ scaleway_instance_volume.data2.id ]
-}
+#  tags = [ "zabbix_server", "2" ]
+#}
 
 resource "scaleway_instance_server" "web" {
-  type        = "GP1-XS"
-  image       = "ubuntu_focal"
-  name        = "Grafana-3"
- # user_name      = "user"
- # password       = "Epsi2021!"
-
+  type = "DEV1-S"
+  image = "debian_bullseye"
   user_data = {
-    foo        = "bar"
-    cloud-init = file("${path.module}/cloud-init.yml")
+    cloud-init = file("./zabbix.sh")
+  ip_id = scaleway_instance_ip.public_ip.id
   }
 }
 
-
+#resource "scaleway_lb" "base" {
+#  ip_id  = scaleway_lb_ip.ip.id
+#  zone = "fr-par-1"
+#  type   = "LB-S"
+#  release_ip = false
+#}

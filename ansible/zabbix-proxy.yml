@@ -1,9 +1,0 @@
----
-- hosts: zabbix_proxy
-  become: true
-  collections:
-    - community.zabbix
-
-  roles:
-    - role: geerlingguy.mysql
-    - role: zabbix_proxy
