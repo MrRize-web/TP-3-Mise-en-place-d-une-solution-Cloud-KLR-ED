@@ -143,7 +143,9 @@ Creating the directory to store the Terraform project
 Creating the first Terraform file. Terraform files must necessarily end with the .tf extension.
 
 ```nano main.tf```
+
 ### Example : 
+
 ```
 terraform {
 required_providers {
@@ -167,12 +169,37 @@ ip_id = scaleway_instance_ip.public_ip.id
 root_volume {}
 }
 ```
+
 Terraform Initialization, Planning and Implementation.
+
 ```terraform init```
+
 ```terraform plan```
+
 ```terraform apply```
+
 Once your tests are completed you can destroy the resources with :
 ```terraform destroy```
+# Old Terraform
+
+The idea was to configure our instances with ansible thanks to terracform which returns the IPs in the inventories but this proved impossible due to IP problems. 
+
+We had then made an attempt on the kubernetest cluster but having little documentation with Helms we also decided to abandon this solution to turn to the Clout Init.
+
+# Current Terraform
+In our terraforma, we will install two apache 2 servers, a zabbix server and an HAproxy :
+For the installation and configuration of the applications it will be done through bash script. For their execution we used scaleway_instance_server where the user_data option is present :
+Exemple : 
+```resource "scaleway_instance_server" "web" {
+  type = "DEV1-S"
+  image = "ubuntu_focal"
+  user_data = {
+    cloud-init = file("${path.module}/script.sh")
+  }
+}
+```
+the cloud init will run after the full deployment of the intance and will take more or less time to be operational depending on the size of the script and its quality
+In our case there will be one script per instance that will deploy and configure each service.
 
 ## How to contribute
 Just send a pull-request :trophy:
