@@ -183,14 +183,18 @@ Terraform Initialization, Planning and Implementation.
 
 Once your tests are completed you can destroy the resources with :
 ```terraform destroy```
-# Old Terraform
+
+# Old Terraform Version
 
 The idea was to configure our instances with ansible thanks to terracform which returns the IPs in the inventories but this proved impossible due to IP problems. 
+Due to the private_ip of the instances constantly changing, we couldnt keep the same ssh_key configuration. It was blocking for the rest of the playbook which consisted in configuring the servers after the creations of instances. (Still accessible in the ```playbook.yml-REMNANT``` if curiosity appears).
 
-We had then made an attempt on the kubernetest cluster but having little documentation with Helms we also decided to abandon this solution to turn to the Clout Init.
+We had then made an attempt on the kubernetest cluster but having little documentation with Helms we also decided to abandon this solution. It could have provided a good practice with the discovery of Kub but the few tries turned out unsuccesful. 
 
-# Current Terraform
-In our terraforma, we will install two apache 2 servers, a zabbix server and an HAproxy :
+That is why we turned ourselves to the Clout Init.
+
+# Current Terraform Version
+In our terraform, we install two Apache2 servers, a Zabbix server and an HAproxy :
 For the installation and configuration of the applications it will be done through bash script. For their execution we used scaleway_instance_server where the user_data option is present :
 Example : 
 ```resource "scaleway_instance_server" "web" {
@@ -204,101 +208,47 @@ Example :
 the cloud init will run after the full deployment of the intance and will take more or less time to be operational depending on the size of the script and its quality
 In our case there will be one script per instance that will deploy and configure each service.
 
-Example Script Zabbix-Server : 
-```
-#!/bin/sh
-echo "Updating ..."
-sudo apt update && sudo apt upgrade -y
+We have a total of 3 scripts for 3 different instances :
 
-echo "Installing APACHE2 ..."
-sudo apt install apache2 php php-mysql php-mysqlnd php-ldap php-bcmath php-mbstring php-gd php-pdo php-xml libapache2-mod-php
+- apache.sh
+- haproxy.sh
+- zabbix.sh
 
-echo "Enabling APACHE2"
-sudo systemctl enable apache2
+Our terraform can fully install and configure the zabbix server and the apache servers from scratch.
 
-echo "Restaring APACHE2"
-sudo systemctl restart apache2
+The only problem is with haproxy, it require to input the ip adresses of both the web servers manually. We couldnt make it directly in the script because it would need to know the public_ip of the servers before.
 
-echo "Installing MARIADB ..."
-sudo apt install mariadb-server mariadb-client
+## Results
 
-echo "Configuration of database mysql ..."
-sudo mysql -e "drop database if exists zabbix;"
-sudo mysql -e "create database if not exists zabbix character set utf8 collate utf8_bin;"
-sudo mysql -e "create user if not exists 'zabbix'@'localhost' identified by 'Epsi'"
-sudo mysql -e "grant all privileges on zabbix.* to 'zabbix'@'localhost' identified by 'Epsi'"
+When Zabbix instances is created and the script is done running (you can follow the current action of the script running by using ```journalctl -xe```), you will then have to go on ```http://{IP}/zabbix``` to proceed with the manual installation of your Zabbix Server.
 
-sudo touch ~/.my.cnf
-
-sudo sed -i '1i[mysql]' ~/.my.cnf
-sudo sed -i '2iuser = zabbix' ~/.my.cnf
-sudo sed -i '3ipassword = Epsi' ~/.my.cnf
-
-sudo chmod 760 ~/.my.cnf
-
-echo "Get Zabbix Repo 5.4-1 debian11"
-sudo wget --no-check-certificate https://repo.zabbix.com/zabbix/5.4/debian/pool/main/z/zabbix-release/zabbix-release_5.4-1+debian11_all.deb
-
-echo "DPKG Zabbix repo"
-sudo dpkg -i zabbix-release_5.4-1+debian11_all.deb
-
-echo "Updating..."
-sudo apt update -y
-
-echo "Installing Zabbix ..."
-sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent -y
-
-echo "Installing Zabbix Database ..."
-sudo zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | sudo mysql -uzabbix -p zabbix --password=Epsi
-
-echo "Configuration of zabbix server files ..."
-sudo sed -i '/# DB=Host/c\DBHOST=localhost' /etc/zabbix/zabbix_server.conf
-sudo sed -i '/DBName=/c\DBName=zabbix' /etc/zabbix/zabbix_server.conf
-sudo sed -i '/DBUser=/c\DBUser=zabbix' /etc/zabbix/zabbix_server.conf
-sudo sed -i '/DBPassword=/c\DBPassword=Epsi' /etc/zabbix/zabbix_server.conf
-
-# php_value date.timezone Europe/Riga
-echo "Editing Timezone for Europe/Riga ..."
-sudo sed -i 's/# php_value date.timezone Europe/Riga/php_value date.timezone Europe/Riga/' /etc/zabbix/apache.conf
-
-echo "Restarting and Enabling Services ..."
-sudo systemctl restart apache2
-
-sudo systemctl start zabbix-server zabbix-agent
-
-sudo systemctl enable zabbix-server zabbix-agent
-
-sudo systemctl status zabbix-server
-
-sudo systemctl status zabbix-agent
-
-sudo ufw allow 80/tcp
-
-sudo ufw allow 443/tcp
-
-sudo ufw reload
-```
-## Result 
 <div align="center">
 <a>
-    <img src="images/zabbix1.png"  width="1000" height="500">
+    <img src="images/zabbix1.png"  width="800" height="400">
+</a>
+</div align="center">
+
+The next two images are the webservers showing that their configuration works.
+
+<div align="center">
+<a>
+    <img src="images/apache1.png"  width="500" height="100">
 </a>
 </div align="center">
 <div align="center">
 <a>
-    <img src="images/apache1.png"  width="1000" height="500">
+    <img src="images/apache2.png"  width="500" height="100">
 </a>
 </div align="center">
+
+Because HAProxy doesnt have his backend configured, the page shown is Apache because it's also installed on HAProxy.
+
 <div align="center">
 <a>
-    <img src="images/apache2.png"  width="1000" height="500">
+    <img src="images/HA.png" width="500" height="100">
 </a>
 </div align="center">
-<div align="center">
-<a>
-    <img src="images/HA.png" width="1000" height="500">
-</a>
-</div align="center">
+
 ## How to contribute
 Just send a pull-request :trophy:
 
