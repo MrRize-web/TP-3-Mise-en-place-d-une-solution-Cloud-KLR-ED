@@ -9,29 +9,6 @@
 <h3 align="center">Mise en place d'une solution Cloud</h3>
 </div>
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -63,7 +40,7 @@ environment Documentation
 ```sudo curl -o /usr/local/bin/scw -L "https://github.com/scaleway/scaleway-cli/releases/download/v2.4.0/scw-2.4.0-linux-x86_64" ```
   
   ```sudo chmod +x /usr/local/bin/scw ```
-  
+<p align="right">(<a href="#top">back to top</a>)</p>  
 ### Prerequisites
 #### generate an SSH key
 
@@ -105,14 +82,18 @@ Copy the content of the public key which is displayed. You will need this in the
 You must upload the content of the public part of the SSH key pair you just generated to the Scaleway interface. This is then transferred to your Instance during the boot process. You can then connect and authenticate from your local machine (where the private key is) to the remote Instance (where the public key is).
 
 * Log into the Scaleway console, and navigate to the Credentials tab of your Project Dashboard:
+<div align="center">
 <a href="https://www.scaleway.com/en/docs/console/my-project/how-to/create-ssh-key/">
     <img src="images/scaleway-credentials-nav.png" alt="Logo" width="800" height="200">
 </a>
-
+</div align="center">
 * Scroll down to the SSH Key section, and click Add a new SSH key.
+
+<div align="center">
 <a href="https://www.scaleway.com/en/docs/console/my-project/how-to/create-ssh-key/">
     <img src="images/scaleway-ssh-keys.png" alt="Logo" width="800" height="200">
 </a>
+</div align="center">
 
 Paste the content of the public key (which you copied in the previous step) into the pop-up box, and optionally add a description. Then click Add a SSH key.
 You will now be able to connect to your Instances via SSH
@@ -121,7 +102,7 @@ If problem when redeploying new instance :
  ```ssh-keygen -f "/home/$user$/.ssh/known_hosts" -R "Ip_Public"```
 
  ```ssh -i ~/.ssh/id_rsa root@51.15.209.133```
- 
+ <p align="right">(<a href="#top">back to top</a>)</p>
 ## Configuration de la CLI SCW
 
 ```scw init```
