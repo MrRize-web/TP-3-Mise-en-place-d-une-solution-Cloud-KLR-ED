@@ -13,6 +13,9 @@ provider "scaleway" {
 }
 
 resource "scaleway_instance_ip" "public_ip" {}
+resource "scaleway_instance_ip" "haproxy_ip" {}
+resource "scaleway_instance_ip" "webserver1_ip" {}
+resource "scaleway_instance_ip" "webserver2_ip" {}
 
 #resource "scaleway_instance_server" "zabbix_web" {
 #  type        = "GP1-XS"
@@ -37,7 +40,33 @@ resource "scaleway_instance_server" "web" {
   ip_id = scaleway_instance_ip.public_ip.id
   user_data = {
     cloud-init = file("./zabbix.sh")
-  #ip_id = scaleway_instance_ip.public_ip.id
+  }
+}
+
+resource "scaleway_instance_server" "webserver1" {
+  type = "DEV1-S"
+  image = "debian_bullseye"
+  ip_id = scaleway_instance_ip.webserver1_ip.id
+  user_data = {
+    cloud-init = file("./apache.sh")
+  }
+}
+
+resource "scaleway_instance_server" "webserver2" {
+  type = "DEV1-S"
+  image = "debian_bullseye"
+  ip_id = scaleway_instance_ip.webserver2_ip.id
+  user_data = {
+    cloud-init = file("./apache.sh")
+  }
+}
+
+resource "scaleway_instance_server" "haproxy" {
+  type = "DEV1-S"
+  image = "debian_bullseye"
+  ip_id = scaleway_instance_ip.haproxy_ip.id
+  user_data = {
+    cloud-init = file("./haproxy.sh")
   }
 }
 

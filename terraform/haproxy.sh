@@ -8,9 +8,6 @@ sudo apt update && sudo apt upgrade -y
 echo "Installing APACHE2 ..."
 sudo apt install apache2 -y
 
-echo "Configurating HAPROXY Server ..."
-echo "<H1>Hello There !</H1>" | sudo tee /var/www/html/index.html
-
 echo "Enabling APACHE2"
 sudo systemctl enable apache2
 
@@ -32,8 +29,8 @@ sudo sed -i '$a#Define backend' /etc/haproxy/haproxy.cfg
 
 sudo sed -i '$abackend apache_backend_servers' /etc/haproxy/haproxy.cfg
 sudo sed -i '$a        balance            roundrobin' /etc/haproxy/haproxy.cfg
-sudo sed -i '$a        server             [IP]' /etc/haproxy/haproxy.cfg
-sudo sed -i '$a        server             [IP2]' /etc/haproxy/haproxy.cfg
+sudo sed -i '$a        server             backend01 [IP] check' /etc/haproxy/haproxy.cfg
+sudo sed -i '$a        server             backend02 [IP] check' /etc/haproxy/haproxy.cfg
 
 echo "Restarting HAPROXY ..."
 sudo systemctl restart haproxy

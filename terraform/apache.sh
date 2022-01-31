@@ -6,7 +6,8 @@ sudo apt-get update -y && sudo apt-get upgrade -y
 echo -e "\n Installing Apache2"
 sudo apt-get install apache2 -y
 
-#echo -e "\n Verify install"
+echo "Configurating Server Page..."
+echo "<H1>Hello There !</H1>" | sudo tee /var/www/html/index.html
 
 # Permissions
 echo -e "\n Permissions for /var/www"
