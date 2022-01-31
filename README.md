@@ -1,226 +1,185 @@
 <div id="top"></div>
 
+<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/github_username/repo_name">
+    <img src="images/télécharger.png" alt="Logo" width="350" height="100">
   </a>
-
-  <h3 align="center">TP-3-Mise-en-place-d-une-solution-Cloud</h3>
-
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
+<h3 align="center">Mise en place d'une solution Cloud</h3>
 </div>
-
-
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+The objective of this tutorial is to experiment with the deployment of a cloud solution in a cloud platform. Unlike the previous lab, this one can be done in groups of 2 or 3. The objective of this tutorial is not to evaluate your ability to deploy a solution, but rather your ability to optimize and automate its deployment.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [Terraform](https://www.terraform.io/cli/commands/plan)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Getting started with Terraform and Scaleway
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Tutorial on how to get started with Terraform and Scaleway.
+The provision of Scaleway credentials will be done with the SCW CLI. This will avoid any credential leaks
 
+# Prerequisites
+## Installing Terraform
+The Terraform documentation is more suitable because the installation method depends strongly on your environment
+environment Documentation
+
+### CLI Scaleway
+#### Installation de CLI Scaleway
+
+
+```sudo curl -o /usr/local/bin/scw -L "https://github.com/scaleway/scaleway-cli/releases/download/v2.4.0/scw-2.4.0-linux-x86_64" ```
+  
+  ```sudo chmod +x /usr/local/bin/scw ```
+<p align="right">(<a href="#top">back to top</a>)</p>  
 ### Prerequisites
+#### generate an SSH key
+
+SSH keys allow you to securely connect to your Instances without using a password. An SSH key consists of an RSA key pair, which has two elements:
+
+An identification key (also known as private key), which you must keep securely on the computer you want to connect from.
+A public key which you must upload to the Scaleway interface. This is then transferred to your Instance during the boot process.
+You can generate the SSH key pair on your local machine. The process will depend on your operating system.
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+## Requirements:
+You have an account and are logged into the Scaleway Console
 
-### Installation
+Type ```ssh-keygen -o -b 4096``` and press Enter to generate a new key.
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+Important: For security reasons you must generate a 2048-bit or 4096-bit RSA key (hence the -b 4096 part of the command). Older 1024-bit keys are no longer supported. The -o option was added in 2014, to specify use of the new OpenSSH format. If the command fails for you, try removing the -o.
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+Enter a filepath to save the key to when prompted. Alternatively, press Enter to leave this at the default setting (the key will be saved in a file called id_rsa in the /Users/me/.ssh directory).
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+```Enter file in which to save the key (/Users/me/.ssh/id_rsa):```
 
+Enter a passphrase when prompted. This step is not mandatory, but is recommended for increased security. The passphrase can be freely chosen. If you do not want to set a passphrase, press Enter directly.
 
+```Enter passphrase (empty for no passphrase):```
 
-<!-- USAGE EXAMPLES -->
-## Usage
+Enter the passphrase again for confirmation when prompted, and press Enter:
+```Enter same passphrase again:```
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+The key pair is generated in the filepath you specified. The key pair consists of:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+The public key, named ```id\_rsa.pub```
+The private (identification) key, named ```id\_rsa```
+Display the content of the public key with the following command and copy it.
+```cat /Users/me/.ssh/id_rsa.pub```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+Copy the content of the public key which is displayed. You will need this in the next step. Your key should look something like the output shown:
+```ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/tcOt7Lwx5MEPyHo+pcK/XYi7ZvZi4OzLZd59E2MyTLg5```
+## How to upload the public SSH key to the Scaleway interface
+You must upload the content of the public part of the SSH key pair you just generated to the Scaleway interface. This is then transferred to your Instance during the boot process. You can then connect and authenticate from your local machine (where the private key is) to the remote Instance (where the public key is).
 
+* Log into the Scaleway console, and navigate to the Credentials tab of your Project Dashboard:
+<div align="center">
+<a href="https://www.scaleway.com/en/docs/console/my-project/how-to/create-ssh-key/">
+    <img src="images/scaleway-credentials-nav.png" alt="Logo" width="800" height="200">
+</a>
+</div align="center">
+* Scroll down to the SSH Key section, and click Add a new SSH key.
 
+<div align="center">
+<a href="https://www.scaleway.com/en/docs/console/my-project/how-to/create-ssh-key/">
+    <img src="images/scaleway-ssh-keys.png" alt="Logo" width="800" height="200">
+</a>
+</div align="center">
 
-<!-- ROADMAP -->
-## Roadmap
+Paste the content of the public key (which you copied in the previous step) into the pop-up box, and optionally add a description. Then click Add a SSH key.
+You will now be able to connect to your Instances via SSH
+If problem when redeploying new instance : 
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+ ```ssh-keygen -f "/home/$user$/.ssh/known_hosts" -R "Ip_Public"```
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+ ```ssh -i ~/.ssh/id_rsa root@51.15.209.133```
+ <p align="right">(<a href="#top">back to top</a>)</p>
+## Configuration de la CLI SCW
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+```scw init```
 
+```Enter a valid secret-key or an email: <votre_mail>
+Enter your password: <votre mot de passe il ne s'affichera pas c'est normal>
+To improve this tool we rely on diagnostic and usage data.
+Sending such data is optional and can be disabled at any time by running "scw config set send-telemetry=false".
+Do you want to send usage statistics and diagnostics? (Y/n): y
+To fully enjoy Scaleway CLI we recommend you install autocomplete support in your shell.
+Do you want to install autocomplete? (Y/n): y
+Creating new config at /home/bbalaud/.config/scw/config.yaml
+Config saved at /home/bbalaud/.config/scw/config.yaml:
+access_key: SCWA7Z3HSQ5T46GT9E0V
+secret_key: 26acf066-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+default_organization_id: 47fd9bd7-e93b-40e9-98fe-3691351fa3f4
+default_project_id: 47fd9bd7-e93b-40e9-98fe-3691351fa3f4
+default_region: fr-par
+default_zone: fr-par-1
+To enable autocomplete, scw needs to update your shell configuration.
+What type of shell are you using (default: bash):
+To enable autocomplete we need to append to ~/.bashrc the following lines:
+# Scaleway CLI autocomplete initialization.
+eval "$(scw autocomplete script shell=bash)"
+Do you want to proceed with these changes? (Y/n): y
+[V] Initialization completed with success.
+Except for SSH key: could not find an SSH key at ~/.ssh/id_rsa.pub
+```
+# First Terraform
 
+Based on scw-cli README.md
+Creating the directory to store the Terraform project
 
-<!-- CONTRIBUTING -->
-## Contributing
+```mkdir myproject```
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+```cd myproject```
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+Creating the first Terraform file. Terraform files must necessarily end with the .tf extension.
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+```nano main.tf```
+### Example : 
+```
+terraform {
+required_providers {
+scaleway = {
+source = "scaleway/scaleway"
+}
+}
+required_version = ">= 0.13"
+}
+provider "scaleway" {
+zone = "fr-par-1"
+region = "fr-par"
+}
+resource "scaleway_instance_ip" "public_ip" {
+}
+resource "scaleway_instance_server" "web" {
+type = "DEV1-S"
+image = "ubuntu_focal"
+tags = ["front", "web"]
+ip_id = scaleway_instance_ip.public_ip.id
+root_volume {}
+}
+```
+Terraform Initialization, Planning and Implementation.
+```terraform init```
+```terraform plan```
+```terraform apply```
+Once your tests are completed you can destroy the resources with :
+```terraform destroy```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+## How to contribute
+Just send a pull-request :trophy:
 
+## Authors
+:cocktail: <b>Kilian Le Roux</b> - <i>Developper | Sysadmin</i>. </br>
+:cocktail: <b>Etienne Drapp</b> - <i>Developper | Sysadmin</i>. </br>
 
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
+## Sources
+:gem: Terraform Install : https://nextgentips.com/2021/11/20/how-to-install-terraform-on-debian-11/ </br>
