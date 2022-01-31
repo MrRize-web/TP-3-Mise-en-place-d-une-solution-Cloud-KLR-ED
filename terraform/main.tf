@@ -34,9 +34,10 @@ resource "scaleway_instance_ip" "public_ip" {}
 resource "scaleway_instance_server" "web" {
   type = "DEV1-S"
   image = "debian_bullseye"
+  ip_id = scaleway_instance_ip.public_ip.id
   user_data = {
     cloud-init = file("./zabbix.sh")
-  ip_id = scaleway_instance_ip.public_ip.id
+  #ip_id = scaleway_instance_ip.public_ip.id
   }
 }
 
